@@ -1,5 +1,10 @@
 # UBootEnv
 
+[![CircleCI](https://circleci.com/gh/nerves-project/uboot_env.svg?style=svg)](https://circleci.com/gh/nerves-project/uboot_env)
+[![Hex version](https://img.shields.io/hexpm/v/uboot_env.svg "Hex version")](https://hex.pm/packages/uboot_env)
+
+Read and write UBoot environment block
+
 ## Read
 ```bash
 mix u_boot_env.read /dev/sdc 0x2000 0x2000
