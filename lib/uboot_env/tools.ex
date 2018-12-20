@@ -1,6 +1,4 @@
-defmodule Nerves.Runtime.UBootEnv.Tools do
-  alias Nerves.Runtime.UBootEnv
-
+defmodule UBootEnv.Tools do
   @moduledoc """
   This module uses U-boot tools' `fw_printenv` to read environment blocks.
   It is only useful on systems running old versions of OTP that can't read

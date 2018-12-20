@@ -1,6 +1,6 @@
-defmodule Nerves.Runtime.UBootEnv do
+defmodule UBootEnv do
   @moduledoc """
-  Nerves.Runtime.UBootEnv reads a non-replicated U-Boot environment block for
+  UBootEnv reads a non-replicated U-Boot environment block for
   storing firmware and provisioning information.
 
   The U-Boot environment format looks like this:
@@ -18,7 +18,7 @@ defmodule Nerves.Runtime.UBootEnv do
   newlines.
   """
 
-  alias Nerves.Runtime.UBootEnv.{Config, Tools}
+  alias UBootEnv.{Config, Tools}
 
   @doc """
   Read the UBoot environment into a map or key value pairs

@@ -1,4 +1,4 @@
-defmodule Nerves.Runtime.UBootEnv.Config do
+defmodule UBootEnv.Config do
   @default_config_file "/etc/fw_env.config"
 
   @moduledoc """
