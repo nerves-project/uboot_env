@@ -8,7 +8,7 @@ Read and write UBoot environment block
 ## Read
 
 ```bash
-mix u_boot_env.read /dev/sdc 0x2000 0x2000
+mix uboot_env.read /dev/sdc 0x2000 0x2000
   a.nerves_fw_application_part0_devpath = "/dev/mmcblk0p3"
   a.nerves_fw_application_part0_fstype = "ext4"
   a.nerves_fw_application_part0_target = "/root"
@@ -44,7 +44,7 @@ mix u_boot_env.read /dev/sdc 0x2000 0x2000
 ## Write
 
 ```bash
-mix u_boot_env.write /dev/sdc 0x2000 0x2000 test "abc"
+mix uboot_env.write /dev/sdc 0x2000 0x2000 test "abc"
   a.nerves_fw_application_part0_devpath = "/dev/mmcblk0p3"
   a.nerves_fw_application_part0_fstype = "ext4"
   a.nerves_fw_application_part0_target = "/root"
@@ -81,7 +81,7 @@ mix u_boot_env.write /dev/sdc 0x2000 0x2000 test "abc"
 ## Delete
 
 ```bash
-mix u_boot_env.delete /dev/sdc 0x2000 0x2000 test
+mix uboot_env.delete /dev/sdc 0x2000 0x2000 test
   a.nerves_fw_application_part0_devpath = "/dev/mmcblk0p3"
   a.nerves_fw_application_part0_fstype = "ext4"
   a.nerves_fw_application_part0_target = "/root"
@@ -130,4 +130,3 @@ end
 Documentation can be generated with [ExDoc](https://github.com/elixir-lang/ex_doc)
 and published on [HexDocs](https://hexdocs.pm). Once published, the docs can
 be found at [https://hexdocs.pm/uboot_env](https://hexdocs.pm/uboot_env).
-
