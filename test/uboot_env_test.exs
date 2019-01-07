@@ -1,6 +1,7 @@
 defmodule UBootEnvTest do
   use ExUnit.Case
   doctest UBootEnv
+  doctest UBootEnv.Config
 
   @fixtures Path.expand("fixtures", __DIR__)
 

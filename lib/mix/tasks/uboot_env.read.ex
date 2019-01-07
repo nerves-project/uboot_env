@@ -1,6 +1,7 @@
 defmodule Mix.Tasks.UBootEnv.Read do
   use Mix.Task
   import Mix.UBootEnv.Utils
+  import UBootEnv.Config, only: [parse_int: 1]
 
   @shortdoc "Read UBootEnv of a device."
 

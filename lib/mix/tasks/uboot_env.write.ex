@@ -1,6 +1,7 @@
 defmodule Mix.Tasks.UBootEnv.Write do
   use Mix.Task
   import Mix.UBootEnv.Utils
+  import UBootEnv.Config, only: [parse_int: 1]
 
   @shortdoc "Write a key value pair to UBootEnv of a device."
 
