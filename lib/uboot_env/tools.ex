@@ -1,9 +1,8 @@
 defmodule UBootEnv.Tools do
   @moduledoc """
-  This module uses U-boot tools' `fw_printenv` to read environment blocks.
-  It is only useful on systems running old versions of OTP that can't read
-  device files. This module has a known issue with parsing key/value pairs
-  with embedded newlines.
+  This module uses U-boot tools' `fw_printenv` to read environment blocks.  It
+  is only useful if OTP 21 is not available. This module has a known issue with
+  parsing key-value pairs with embedded newlines.
   """
 
   @doc """
