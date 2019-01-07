@@ -10,7 +10,8 @@ defmodule UBootEnv.MixProject do
       description: description(),
       package: package(),
       docs: docs(),
-      deps: deps()
+      deps: deps(),
+      dialyzer: [plt_add_apps: [:mix]]
     ]
   end
 
@@ -23,7 +24,8 @@ defmodule UBootEnv.MixProject do
   defp deps do
     [
       {:fwup, "~> 0.3.0", only: [:test]},
-      {:ex_doc, "~> 0.18", only: [:dev, :test], runtime: false}
+      {:ex_doc, "~> 0.18", only: [:dev, :test], runtime: false},
+      {:dialyxir, "~> 1.0.0-rc.4", only: [:dev], runtime: false}
     ]
   end
 
