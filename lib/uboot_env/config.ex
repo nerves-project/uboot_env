@@ -39,6 +39,20 @@ defmodule UBootEnv.Config do
     {dev_name, parse_int(dev_offset), parse_int(env_size)}
   end
 
-  defp parse_int(<<"0x", hex_int::binary()>>), do: String.to_integer(hex_int, 16)
-  defp parse_int(decimal_int), do: String.to_integer(decimal_int)
+  @doc """
+  Parse an integer
+
+  Examples:
+
+  ```elixir
+  iex> UBootEnv.Config.parse_int("0x12")
+  18
+
+  iex> UBootEnv.Config.parse_int("1234")
+  1234
+  ```
+  """
+  @spec parse_int(String.t()) :: integer()
+  def parse_int(<<"0x", hex_int::binary()>>), do: String.to_integer(hex_int, 16)
+  def parse_int(decimal_int), do: String.to_integer(decimal_int)
 end
