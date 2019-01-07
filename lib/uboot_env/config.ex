@@ -2,7 +2,7 @@ defmodule UBootEnv.Config do
   @default_config_file "/etc/fw_env.config"
 
   @moduledoc """
-  Utilities for reading the U-Boot tools `fw_env.config` file.
+  Utilities for reading the U-Boot's `fw_env.config` file.
   """
 
   @doc """

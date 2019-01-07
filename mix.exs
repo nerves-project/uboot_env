@@ -35,7 +35,7 @@ defmodule UBootEnv.MixProject do
 
   defp description do
     """
-    Read and write UBoot environment variables
+    Read and write to U-Boot environment blocks
     """
   end
 

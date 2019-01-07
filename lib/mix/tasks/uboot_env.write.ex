@@ -3,10 +3,17 @@ defmodule Mix.Tasks.UbootEnv.Write do
   import Mix.UbootEnv.Utils
   import UBootEnv.Config, only: [parse_int: 1]
 
-  @shortdoc "Write a key value pair to UBootEnv of a device."
+  @shortdoc "Write a key-value pair to a U-Boot environment"
 
   @moduledoc """
-  Write a key value pair to UBootEnv of a device.
+  Write a key-value pair to U-Boot environment block.
+
+  Pass either a path to a configuration file like `/etc/fw_env.config` or the
+  path to the file or device containing the U-Boot environment and its offset
+  and size.
+
+  The U-Boot environment is first read and validated before adding the new
+  key-value pair.
 
   Usage:
     mix uboot_env.write PATH_TO_DEVICE DEV_OFFSET ENV_SIZE KEY VALUE
