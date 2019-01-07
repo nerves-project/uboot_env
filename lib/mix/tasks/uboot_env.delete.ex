@@ -1,6 +1,6 @@
-defmodule Mix.Tasks.UBootEnv.Delete do
+defmodule Mix.Tasks.UbootEnv.Delete do
   use Mix.Task
-  import Mix.UBootEnv.Utils
+  import Mix.UbootEnv.Utils
   import UBootEnv.Config, only: [parse_int: 1]
 
   @shortdoc "Delete a key value pair from the UBootEnv of a device."
