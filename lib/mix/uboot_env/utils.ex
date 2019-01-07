@@ -1,7 +1,7 @@
 defmodule Mix.UBootEnv.Utils do
   def render_kv(%{} = kv) do
     for {key, val} <- kv do
-      Mix.shell().info("\t #{key} = #{inspect(val, limit: :infinity)}")
+      Mix.shell().info("  #{key} = #{inspect(val, limit: :infinity)}")
     end
   end
 
