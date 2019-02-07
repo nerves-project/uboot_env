@@ -109,24 +109,31 @@ defmodule UBootEnv do
   def load(dev_name, dev_offset, env_size) do
     case File.open(dev_name) do
       {:ok, fd} ->
-        {:ok, bin} = :file.pread(fd, dev_offset, env_size)
-        File.close(fd)
-        <<expected_crc::little-size(32), tail::binary>> = bin
-        actual_crc = :erlang.crc32(tail)
+        case :file.pread(fd, dev_offset, env_size) do
+          {:ok, bin} ->
+            File.close(fd)
+            <<expected_crc::little-size(32), tail::binary>> = bin
+            actual_crc = :erlang.crc32(tail)
 
-        if actual_crc == expected_crc do
-          kv =
-            tail
-            |> :binary.bin_to_list()
-            |> Enum.chunk_by(fn b -> b == 0 end)
-            |> Enum.reject(&(&1 == [0]))
-            |> Enum.take_while(&(hd(&1) != 0))
-            |> decode()
+            if actual_crc == expected_crc do
+              kv =
+                tail
+                |> :binary.bin_to_list()
+                |> Enum.chunk_by(fn b -> b == 0 end)
+                |> Enum.reject(&(&1 == [0]))
+                |> Enum.take_while(&(hd(&1) != 0))
+                |> decode()
 
-          {:ok, kv}
-        else
-          {:error, :invalid_crc}
+              {:ok, kv}
+            else
+              {:error, :invalid_crc}
+            end
+
+          :eof ->
+            {:error, :empty}
         end
+
+      # :file.pread
 
       error ->
         error
