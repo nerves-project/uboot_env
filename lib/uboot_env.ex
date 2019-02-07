@@ -96,6 +96,35 @@ defmodule UBootEnv do
     crc <> kv <> padding
   end
 
+  @spec process_contents({:ok, binary()} | atom() | any()) ::
+          {:ok, map()} | {:error, reason :: binary()}
+  defp process_contents({:ok, bin}) do
+    <<expected_crc::little-size(32), tail::binary>> = bin
+    actual_crc = :erlang.crc32(tail)
+
+    if actual_crc == expected_crc do
+      kv =
+        tail
+        |> :binary.bin_to_list()
+        |> Enum.chunk_by(fn b -> b == 0 end)
+        |> Enum.reject(&(&1 == [0]))
+        |> Enum.take_while(&(hd(&1) != 0))
+        |> decode()
+
+      {:ok, kv}
+    else
+      {:error, :invalid_crc}
+    end
+  end
+
+  defp process_contents(:eof) do
+    {:error, :empty}
+  end
+
+  defp process_contents(_other) do
+    {:error, :unknown}
+  end
+
   @doc """
   Load key-value pairs from U-Boot environment
 
@@ -109,24 +138,12 @@ defmodule UBootEnv do
   def load(dev_name, dev_offset, env_size) do
     case File.open(dev_name) do
       {:ok, fd} ->
-        {:ok, bin} = :file.pread(fd, dev_offset, env_size)
+        retval =
+          :file.pread(fd, dev_offset, env_size)
+          |> process_contents()
+
         File.close(fd)
-        <<expected_crc::little-size(32), tail::binary>> = bin
-        actual_crc = :erlang.crc32(tail)
-
-        if actual_crc == expected_crc do
-          kv =
-            tail
-            |> :binary.bin_to_list()
-            |> Enum.chunk_by(fn b -> b == 0 end)
-            |> Enum.reject(&(&1 == [0]))
-            |> Enum.take_while(&(hd(&1) != 0))
-            |> decode()
-
-          {:ok, kv}
-        else
-          {:error, :invalid_crc}
-        end
+        retval
 
       error ->
         error
