@@ -87,4 +87,12 @@ defmodule UBootEnvTest do
     encoded = UBootEnv.encode(kv, env_size)
     assert bin == encoded
   end
+
+  test "eof returns error" do
+    dev_name = Path.join(@fixtures, "fixture_empty.bin")
+    dev_offset = 0x1000
+    env_size = 0x2000
+    error = UBootEnv.load(dev_name, dev_offset, env_size)
+    assert match?({:error, :empty}, error)
+  end
 end
