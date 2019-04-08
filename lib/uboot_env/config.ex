@@ -33,6 +33,7 @@ defmodule UBootEnv.Config do
       |> String.split("\n", trim: true)
       |> Enum.map(&String.trim/1)
       |> Enum.reject(&String.starts_with?(&1, "#"))
+      |> Enum.reject(fn (s) -> String.length(s) == 0 end)
 
     [dev_name, dev_offset, env_size | _] = String.split(config) |> Enum.map(&String.trim/1)
 
