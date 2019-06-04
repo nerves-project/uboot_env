@@ -1,3 +1,5 @@
+version: 2
+
 install_elixir: &install_elixir
   run:
     name: Install Elixir
@@ -20,23 +22,28 @@ install_system_deps: &install_system_deps
       apt update
       apt install -y unzip
 
+install_mdl: &install_mdl
+  run:
+    name: Install Markdown Lint
+    command: |
+      apt install -y ruby
+      gem install mdl
+
 defaults: &defaults
   working_directory: ~/repo
 
-version: 2
-
 jobs:
-  build_elixir_1_7_otp_21:
+  build_elixir_1_8_otp_22:
     docker:
-      - image: erlang:21.2
+      - image: erlang:22.0
         environment:
-          ELIXIR_VERSION: 1.7.4-otp-21
+          ELIXIR_VERSION: 1.8.2-otp-22
           LC_ALL: C.UTF-8
-          SUDO: true
     <<: *defaults
     steps:
       - checkout
       - <<: *install_system_deps
+      - <<: *install_mdl
       - <<: *install_elixir
       - <<: *install_hex_rebar
       - restore_cache:
@@ -44,9 +51,11 @@ jobs:
             - v1-mix-cache-{{ checksum "mix.lock" }}
       - run: mix deps.get
       - run: mix format --check-formatted
+      - run: mix compile
+      - run: mix docs
       - run: mix hex.build
       - run: mix test
-      - run: mix docs
+      - run: mdl --style .circleci/md-style.rb *.md
       - run: mix dialyzer --halt-exit-status
       - save_cache:
           key: v1-mix-cache-{{ checksum "mix.lock" }}
@@ -54,13 +63,12 @@ jobs:
             - _build
             - deps
 
-  build_elixir_1_6_otp_21:
+  build_elixir_1_8_otp_21:
     docker:
-      - image: erlang:21.1
+      - image: erlang:21.3
         environment:
-          ELIXIR_VERSION: 1.6.6-otp-21
+          ELIXIR_VERSION: 1.8.2-otp-21
           LC_ALL: C.UTF-8
-          SUDO: true
     <<: *defaults
     steps:
       - checkout
@@ -68,15 +76,31 @@ jobs:
       - <<: *install_elixir
       - <<: *install_hex_rebar
       - run: mix deps.get
+      - run: mix compile
+      - run: mix test
+
+  build_elixir_1_7_otp_21:
+    docker:
+      - image: erlang:21.3
+        environment:
+          ELIXIR_VERSION: 1.7.4-otp-21
+          LC_ALL: C.UTF-8
+    <<: *defaults
+    steps:
+      - checkout
+      - <<: *install_system_deps
+      - <<: *install_elixir
+      - <<: *install_hex_rebar
+      - run: mix deps.get
+      - run: mix compile
       - run: mix test
 
   build_elixir_1_6_otp_20:
     docker:
       - image: erlang:20.3.8
         environment:
-          ELIXIR_VERSION: 1.6.6
+          ELIXIR_VERSION: 1.6.6-otp-20
           LC_ALL: C.UTF-8
-          SUDO: true
     <<: *defaults
     steps:
       - checkout
@@ -84,15 +108,18 @@ jobs:
       - <<: *install_elixir
       - <<: *install_hex_rebar
       - run: mix deps.get
+      - run: mix compile
       - run: mix test
 
 workflows:
   version: 2
   build_test:
     jobs:
-      - build_elixir_1_7_otp_21:
+      - build_elixir_1_8_otp_22:
           context: org-global
-      - build_elixir_1_6_otp_21:
+      - build_elixir_1_8_otp_21:
+          context: org-global
+      - build_elixir_1_7_otp_21:
           context: org-global
       - build_elixir_1_6_otp_20:
           context: org-global
