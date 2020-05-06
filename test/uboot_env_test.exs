@@ -84,7 +84,7 @@ defmodule UBootEnvTest do
     {:ok, fd} = File.open(dev_name)
 
     {:ok, bin} = :file.pread(fd, dev_offset, env_size)
-    encoded = UBootEnv.encode(kv, env_size)
+    encoded = UBootEnv.encode(kv, env_size) |> IO.iodata_to_binary()
     assert bin == encoded
   end
 

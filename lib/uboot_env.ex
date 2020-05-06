@@ -81,19 +81,20 @@ defmodule UBootEnv do
   Encode a list of key value pairs into the binary form of the U-Boot
   environment block.
   """
-  @spec encode(map(), pos_integer()) :: binary()
+  @spec encode(map(), pos_integer()) :: iodata()
   def encode(kv, env_size) when is_map(kv) do
-    kv =
-      kv
-      |> Enum.map(&(elem(&1, 0) <> "=" <> elem(&1, 1)))
-      |> Enum.join(<<0>>)
+    encoded_kv = [Enum.map(kv, &kv_to_encoded/1), <<0>>]
+    encoded_kv_len = IO.iodata_length(encoded_kv)
 
-    kv = kv <> <<0, 0>>
-    padding = env_size - byte_size(kv) - 4
-    padding = <<-1::signed-unit(8)-size(padding)>>
-    crc = :erlang.crc32(kv <> padding)
-    crc = <<crc::little-size(32)>>
-    crc <> kv <> padding
+    padding_len = env_size - encoded_kv_len - 4
+    padding = :binary.copy(<<-1>>, padding_len)
+
+    crc = :erlang.crc32([encoded_kv, padding])
+    [<<crc::little-size(32)>>, encoded_kv, padding]
+  end
+
+  defp kv_to_encoded({k, v}) do
+    [k, "=", v, <<0>>]
   end
 
   @spec process_contents({:ok, binary()} | atom() | any()) ::
