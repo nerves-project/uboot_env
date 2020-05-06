@@ -30,12 +30,15 @@ defmodule UBootEnv.Tools do
   end
 
   @doc """
-  Decode the output of `fw_printenv`
+  Decode a list of fw_env.config key value pairs into a map
   """
   @spec decode(String.t()) :: map()
-  def decode(env) when is_binary(env) do
-    String.split(env, "\n", trim: true)
-    |> UBootEnv.decode()
+  def decode(env) do
+    env
+    |> String.split("\n", trim: true)
+    |> Enum.map(&String.split(&1, "=", parts: 2))
+    |> Enum.map(fn [k, v] -> {k, v} end)
+    |> Enum.into(%{})
   end
 
   defp exec(cmd, args \\ []) do

@@ -95,4 +95,28 @@ defmodule UBootEnvTest do
     error = UBootEnv.load(dev_name, dev_offset, env_size)
     assert match?({:error, :empty}, error)
   end
+
+  test "decoding what is encoded" do
+    kv = %{
+      "test_value_with_whitespace" => "a b\nc\td e",
+      "test_empty_value" => "",
+      "" => "empty key",
+      "a.nerves_fw_application_part0_devpath" => "/dev/mmcblk0p3",
+      "a.nerves_fw_application_part0_fstype" => "ext4",
+      "a.nerves_fw_application_part0_target" => "/root",
+      "a.nerves_fw_architecture" => "arm",
+      "a.nerves_fw_author" => "The Nerves Team",
+      "a.nerves_fw_description" => "",
+      "a.nerves_fw_platform" => "rpi",
+      "a.nerves_fw_product" => "Nerves Firmware",
+      "a.nerves_fw_version" => "",
+      "nerves_fw_active" => "a",
+      "nerves_fw_devpath" => "/dev/mmcblk0"
+    }
+
+    encoded = UBootEnv.encode(kv, 128 * 1024) |> IO.iodata_to_binary()
+    {:ok, decoded} = UBootEnv.decode(encoded)
+
+    assert decoded == kv
+  end
 end

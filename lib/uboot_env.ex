@@ -49,32 +49,31 @@ defmodule UBootEnv do
   U-Boot environment block.
   """
   @spec write(kv :: map(), Path.t() | nil) :: :ok | {:error, reason :: any()}
-  def write(kv, config_file \\ nil)
+  def write(kv, config_file_or_nil \\ nil) do
+    case write_erlang(kv, config_file_or_nil) do
+      :ok ->
+        :ok
 
-  def write(kv, file_or_nil) do
-    with {:ok, {dev_name, dev_offset, env_size}} <- do_config_read(file_or_nil),
-         {:ok, fd} <- File.open(dev_name, [:raw, :binary, :write]) do
-      uboot_env = encode(kv, env_size)
-      :ok = :file.pwrite(fd, dev_offset, uboot_env)
-      File.close(fd)
-    else
       _error ->
-        Enum.each(kv, fn {key, value} ->
-          Tools.fw_setenv(key, value)
-        end)
+        write_uboot_tools(kv)
     end
   end
 
-  @doc """
-  Decode a list of fw_env.config key value pairs into a map
-  """
-  @spec decode([String.t()]) :: map()
-  def decode(env) when is_list(env) do
-    env
-    |> Enum.map(&to_string(&1))
-    |> Enum.map(&String.split(&1, "=", parts: 2))
-    |> Enum.map(fn [k, v] -> {k, v} end)
-    |> Enum.into(%{})
+  defp write_erlang(kv, config_file_or_nil) do
+    case do_config_read(config_file_or_nil) do
+      {:ok, {dev_name, dev_offset, env_size}} ->
+        uboot_env = encode(kv, env_size)
+        pwrite_file(dev_name, dev_offset, uboot_env)
+
+      error ->
+        error
+    end
+  end
+
+  defp write_uboot_tools(kv) do
+    Enum.each(kv, fn {key, value} ->
+      Tools.fw_setenv(key, value)
+    end)
   end
 
   @doc """
@@ -97,33 +96,31 @@ defmodule UBootEnv do
     [k, "=", v, <<0>>]
   end
 
-  @spec process_contents({:ok, binary()} | atom() | any()) ::
-          {:ok, map()} | {:error, reason :: binary()}
-  defp process_contents({:ok, bin}) do
-    <<expected_crc::little-size(32), tail::binary>> = bin
-    actual_crc = :erlang.crc32(tail)
+  @doc """
+  Decode a a U-Boot environment block to a map
+  """
+  @spec decode(binary()) ::
+          {:ok, map()} | {:error, reason :: atom()}
+  def decode(bin) when is_binary(bin) do
+    <<expected_crc::little-size(32), contents::binary>> = bin
+    actual_crc = :erlang.crc32(contents)
 
     if actual_crc == expected_crc do
-      kv =
-        tail
-        |> :binary.bin_to_list()
-        |> Enum.chunk_by(fn b -> b == 0 end)
-        |> Enum.reject(&(&1 == [0]))
-        |> Enum.take_while(&(hd(&1) != 0))
-        |> decode()
-
-      {:ok, kv}
+      decode_kv_pairs(contents, %{})
     else
       {:error, :invalid_crc}
     end
   end
 
-  defp process_contents(:eof) do
-    {:error, :empty}
-  end
+  def decode_kv_pairs(contents, map) do
+    case :binary.split(contents, <<0>>) do
+      ["" | _rest] ->
+        {:ok, map}
 
-  defp process_contents(_other) do
-    {:error, :unknown}
+      [kv, rest] ->
+        [k, v] = :binary.split(kv, "=")
+        decode_kv_pairs(rest, Map.put(map, k, v))
+    end
   end
 
   @doc """
@@ -135,21 +132,39 @@ defmodule UBootEnv do
   This function requires OTP 21 or later.
   """
   @spec load(Path.t(), non_neg_integer(), pos_integer()) ::
-          {:ok, map()} | {:error, reason :: binary()}
+          {:ok, map()} | {:error, reason :: atom()}
   def load(dev_name, dev_offset, env_size) do
-    case File.open(dev_name) do
-      {:ok, fd} ->
-        retval =
-          :file.pread(fd, dev_offset, env_size)
-          |> process_contents()
+    with {:ok, contents} <- pread_file(dev_name, dev_offset, env_size) do
+      decode(contents)
+    end
+  end
 
+  defp pread_file(path, offset, size) do
+    case File.open(path, [:raw, :binary, :read]) do
+      {:ok, fd} ->
+        rc = :file.pread(fd, offset, size) |> eof_is_error()
         File.close(fd)
-        retval
+        rc
 
       error ->
         error
     end
   end
+
+  defp pwrite_file(path, offset, contents) do
+    case File.open(path, [:raw, :binary, :write, :read]) do
+      {:ok, fd} ->
+        rc = :file.pwrite(fd, offset, contents)
+        File.close(fd)
+        rc
+
+      error ->
+        error
+    end
+  end
+
+  defp eof_is_error(:eof), do: {:error, :empty}
+  defp eof_is_error(other), do: other
 
   defp do_config_read(nil), do: Config.read()
   defp do_config_read(path), do: Config.read(path)
