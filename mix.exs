@@ -43,7 +43,7 @@ defmodule UBootEnv.MixProject do
     [
       licenses: ["Apache-2.0"],
       links: %{
-        "Github" => "https://github.com/nerves-project/uboot_env"
+        "GitHub" => "https://github.com/nerves-project/uboot_env"
       }
     ]
   end
