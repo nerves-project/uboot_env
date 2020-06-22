@@ -24,7 +24,6 @@ defmodule UBootEnv.MixProject do
   # Run "mix help deps" to learn about dependencies.
   defp deps do
     [
-      {:fwup, "~> 0.3.0", only: :test},
       {:ex_doc, "~> 0.18", only: :docs, runtime: false},
       {:dialyxir, "~> 1.0.0", only: :dev, runtime: false}
     ]
