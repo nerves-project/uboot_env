@@ -1,43 +1,135 @@
 defmodule UBootEnv.Config do
-  @default_config_file "/etc/fw_env.config"
-
   @moduledoc """
   Utilities for reading the U-Boot's `fw_env.config` file.
   """
 
-  @doc """
-  Read and decode the specified file (or `fw_env.config` if not passed).
+  alias UBootEnv.Location
 
-  On success, this returns a tuple with the device name that contains the
-  U-Boot environment block, the offset in that file, and the environment size.
+  defstruct [:locations]
+  @type t() :: %__MODULE__{locations: [Location.t()]}
+
+  @doc """
+  Create a UBootEnv.Config from a file (`/etc/fw_env.config` by default)
+
+  This file should be formatted as described in `from_string/1`.
   """
-  @spec read(Path.t()) ::
-          {:ok,
-           {dev_name :: String.t(), dev_offset :: non_neg_integer(), env_size :: pos_integer()}}
-          | {:error, reason :: any}
-  def read(config_file \\ @default_config_file) do
-    case File.read(config_file) do
-      {:ok, config} -> {:ok, decode(config)}
-      _error -> {:error, :no_config}
+  @spec from_file(Path.t()) :: {:ok, t()} | {:error, atom()}
+  def from_file(config_file) do
+    with {:ok, config} <- File.read(config_file) do
+      from_string(config)
     end
   end
 
   @doc """
-  Decode the contents of a `fw_env.config` file.
+  Raising version of `from_file/1`
   """
-  @spec decode(String.t()) ::
-          {dev_name :: String.t(), dev_offset :: non_neg_integer(), env_size :: pos_integer()}
-  def decode(config) do
-    [config] =
-      config
-      |> String.split("\n")
-      |> Enum.map(&String.trim/1)
-      |> Enum.reject(&(&1 == ""))
-      |> Enum.reject(&String.starts_with?(&1, "#"))
+  @spec from_file!(Path.t()) :: UBootEnv.Config.t()
+  def from_file!(config) do
+    case from_file(config) do
+      {:ok, result} -> result
+      {:error, reason} -> raise reason
+    end
+  end
 
-    [dev_name, dev_offset, env_size | _] = String.split(config) |> Enum.map(&String.trim/1)
+  @doc """
+  Create a UBootEnv.Config from the contents of an fw_env.config file
 
-    {dev_name, parse_int(dev_offset), parse_int(env_size)}
+  Only one or two U-Boot environment locations are supported. Each location
+  row has the following format:
+
+  ```
+  <Device name>	<Device offset>	<Env. size>	[Flash sector size]	[Number of sectors]
+  ```
+  """
+  @spec from_string(String.t()) :: {:ok, t()} | {:error, atom()}
+  def from_string(config) do
+    config
+    |> parse_file()
+    |> Enum.flat_map(&parse_line/1)
+    |> locations_to_config()
+  end
+
+  @doc """
+  Raising version of `from_string/1`
+  """
+  @spec from_string!(String.t()) :: UBootEnv.Config.t()
+  def from_string!(config) do
+    case from_string(config) do
+      {:ok, result} -> result
+      {:error, reason} -> raise reason
+    end
+  end
+
+  @doc """
+  Return the environment block size
+  """
+  @spec size(t()) :: pos_integer()
+  def size(config) do
+    first(config).size
+  end
+
+  @doc """
+  Return the first location
+  """
+  @spec first(t()) :: Location.t()
+  def first(config) do
+    hd(config.locations)
+  end
+
+  @doc """
+  Return the second location
+
+  This raises for nonredundant environments.
+  """
+  @spec second(t()) :: Location.t()
+  def second(config) do
+    [_first, second] = config.locations
+    second
+  end
+
+  @doc """
+  Return whether this is a redundant environment
+  """
+  @spec format(t()) :: :redundant | :nonredundant
+  def format(config) do
+    case length(config.locations) do
+      1 -> :nonredundant
+      2 -> :redundant
+    end
+  end
+
+  defp parse_file(config) do
+    config
+    |> String.split("\n")
+    |> Enum.map(&String.trim/1)
+    |> Enum.reject(&(&1 == ""))
+    |> Enum.reject(&String.starts_with?(&1, "#"))
+  end
+
+  defp parse_line(line) do
+    case line |> String.split() |> Enum.map(&String.trim/1) do
+      [dev_name, dev_offset, env_size | _] ->
+        [
+          %UBootEnv.Location{
+            path: dev_name,
+            offset: parse_int(dev_offset),
+            size: parse_int(env_size)
+          }
+        ]
+
+      _other ->
+        []
+    end
+  end
+
+  defp locations_to_config(locations) do
+    case length(locations) do
+      count when count == 1 or count == 2 ->
+        {:ok, %__MODULE__{locations: locations}}
+
+      _other ->
+        {:error, :parse_error}
+    end
   end
 
   @doc """
