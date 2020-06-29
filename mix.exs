@@ -1,6 +1,9 @@
 defmodule UBootEnv.MixProject do
   use Mix.Project
 
+  @version "0.2.0"
+  @source_url "https://github.com/nerves-project/uboot_env"
+
   if String.to_integer(System.otp_release()) < 21 do
     Mix.raise("OTP 21 or later required. Found OTP #{System.otp_release()}.")
   end
@@ -37,21 +40,17 @@ defmodule UBootEnv.MixProject do
   end
 
   defp docs do
-    [extras: ["README.md"], main: "readme"]
+    [extras: ["README.md"], main: "readme", source_ref: "v#{@version}", source_url: @source_url]
   end
 
   defp description do
-    """
-    Read and write to U-Boot environment blocks
-    """
+    "Read and write to U-Boot environment blocks"
   end
 
   defp package do
     [
       licenses: ["Apache-2.0"],
-      links: %{
-        "GitHub" => "https://github.com/nerves-project/uboot_env"
-      }
+      links: %{"GitHub" => @source_url}
     ]
   end
 end
