@@ -120,7 +120,7 @@ defmodule UBootEnv do
     case File.open(path, [:raw, :binary, :read]) do
       {:ok, fd} ->
         rc = :file.pread(fd, offset, size) |> eof_is_error()
-        File.close(fd)
+        _ = File.close(fd)
         rc
 
       error ->
@@ -132,7 +132,7 @@ defmodule UBootEnv do
     case File.open(path, [:raw, :binary, :write, :read]) do
       {:ok, fd} ->
         rc = :file.pwrite(fd, offset, contents)
-        File.close(fd)
+        _ = File.close(fd)
         rc
 
       error ->

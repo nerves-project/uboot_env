@@ -15,7 +15,10 @@ defmodule UBootEnv.MixProject do
       package: package(),
       docs: docs(),
       deps: deps(),
-      dialyzer: [plt_add_apps: [:mix]],
+      dialyzer: [
+        plt_add_apps: [:mix],
+        flags: [:unmatched_returns, :error_handling, :race_conditions]
+      ],
       preferred_cli_env: %{docs: :docs, "hex.build": :docs, "hex.publish": :docs}
     ]
   end
