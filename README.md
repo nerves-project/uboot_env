@@ -14,8 +14,6 @@ This library has the following features:
 
 * Create, read, and write to U-Boot environment blocks in pure Elixir with OTP
   21 and later
-* Fallback to `uboot-tools` for prior OTP versions (this has a known bug for
-  multi-line values)
 * Support for `/etc/fw_env.config` for environment block parameters
 * `mix` utilities to manipulate the block offline
 

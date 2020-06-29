@@ -18,7 +18,7 @@ defmodule UBootEnv do
   newlines.
   """
 
-  alias UBootEnv.{Config, Tools}
+  alias UBootEnv.Config
 
   @doc """
   Read the U-Boot environment into a map or key value pairs
@@ -27,18 +27,11 @@ defmodule UBootEnv do
   U-Boot environment block.  If unspecified, the default path
   `/etc/fw_env.config` will be used.
   """
-  @spec read(Path.t() | nil) ::
-          {:ok, map()}
-          | {:error, reason :: binary()}
-  def read(config_file \\ nil)
-
-  def read(file_or_nil) do
+  @spec read(Path.t() | nil) :: {:ok, map()} | {:error, reason :: binary()}
+  def read(file_or_nil \\ nil) do
     with {:ok, {dev_name, dev_offset, env_size}} <- do_config_read(file_or_nil),
          {:ok, kv} <- load(dev_name, dev_offset, env_size) do
       {:ok, kv}
-    else
-      _error ->
-        Tools.fw_printenv()
     end
   end
 
@@ -50,16 +43,6 @@ defmodule UBootEnv do
   """
   @spec write(kv :: map(), Path.t() | nil) :: :ok | {:error, reason :: any()}
   def write(kv, config_file_or_nil \\ nil) do
-    case write_erlang(kv, config_file_or_nil) do
-      :ok ->
-        :ok
-
-      _error ->
-        write_uboot_tools(kv)
-    end
-  end
-
-  defp write_erlang(kv, config_file_or_nil) do
     case do_config_read(config_file_or_nil) do
       {:ok, {dev_name, dev_offset, env_size}} ->
         uboot_env = encode(kv, env_size)
@@ -68,12 +51,6 @@ defmodule UBootEnv do
       error ->
         error
     end
-  end
-
-  defp write_uboot_tools(kv) do
-    Enum.each(kv, fn {key, value} ->
-      Tools.fw_setenv(key, value)
-    end)
   end
 
   @doc """
