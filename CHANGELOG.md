@@ -1,5 +1,14 @@
 # Changelog
 
+## v0.3.0
+
+This release adds support for redundant U-Boot environments. It reduces the main
+API to `UBootEnv.read/1` and `UBootEnv.write/2`. If you only use those
+functions, your code should work without change.
+
+* New features
+  * Redundant U-Boot support
+
 ## v0.2.0
 
 This release breaks several APIs so please review your code.
