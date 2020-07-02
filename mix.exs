@@ -1,7 +1,7 @@
 defmodule UBootEnv.MixProject do
   use Mix.Project
 
-  @version "0.2.0"
+  @version "0.3.0"
   @source_url "https://github.com/nerves-project/uboot_env"
 
   if String.to_integer(System.otp_release()) < 21 do
@@ -11,7 +11,7 @@ defmodule UBootEnv.MixProject do
   def project do
     [
       app: :uboot_env,
-      version: "0.3.0",
+      version: @version,
       elixir: "~> 1.7",
       start_permanent: Mix.env() == :prod,
       description: description(),
@@ -26,12 +26,10 @@ defmodule UBootEnv.MixProject do
     ]
   end
 
-  # Run "mix help compile.app" to learn about applications.
   def application do
     []
   end
 
-  # Run "mix help deps" to learn about dependencies.
   defp deps do
     [
       {:ex_doc, "~> 0.18", only: :docs, runtime: false},
