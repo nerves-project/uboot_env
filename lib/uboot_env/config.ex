@@ -32,7 +32,7 @@ defmodule UBootEnv.Config do
   end
 
   @doc """
-  Create a UBootEnv.Config from the contents of an fw_env.config file
+  Create a UBootEnv.Config from the contents of an `fw_env.config` file
 
   Only one or two U-Boot environment locations are supported. Each location
   row has the following format:

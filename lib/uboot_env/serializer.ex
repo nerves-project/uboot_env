@@ -4,9 +4,9 @@ defmodule UBootEnv.Serializer do
 
   The U-Boot environment data looks like this:
 
-    * `"<key>=<value>\0"` for each key-value pair
-    * `"\0"` an empty key-value pair to terminate the list.
-      This looks like "\0\0" when you're viewing the file in a hex editor.
+    * `"<key>=<value>\\0"` for each key-value pair
+    * `"\\0"` an empty key-value pair to terminate the list.
+      This looks like `"\\0\\0"` when viewing the file in a hex editor.
   """
 
   @doc """

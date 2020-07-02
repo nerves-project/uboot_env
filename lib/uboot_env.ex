@@ -13,7 +13,7 @@ defmodule UBootEnv do
   @doc """
   Read the U-Boot environment into a map or key value pairs
 
-  The configuration from "/etc/fw_env.config" is used to find the location of
+  The configuration from `"/etc/fw_env.config"` is used to find the location of
   the environment block. See `read/1` for specifying a custom location.
   """
   @spec read() :: {:ok, map()} | {:error, reason :: atom()}
@@ -36,7 +36,7 @@ defmodule UBootEnv do
   @doc """
   Write a map of key value pairs to the U-Boot environment
 
-  The configuration from "/etc/fw_env.config" is used to find the location of
+  The configuration from `"/etc/fw_env.config"` is used to find the location of
   the environment block. See `write/2` for specifying a custom location.
   """
   @spec write(map()) :: :ok | {:error, reason :: atom()}
@@ -59,8 +59,9 @@ defmodule UBootEnv do
   Load the U-Boot environment configuration
 
   This is returns the default U-Boot environment configuration from
-  "/etc/fw_env.config".  If you do not want this, see
-  `UBootEnv.Config.from_file/1` or `UBootEnv.Config.from_string/1`.
+  `"/etc/fw_env.config"`. If you do not want this, see
+  `UBootEnv.Config.from_file/1` or `UBootEnv.Config.from_string/1` for
+  creating or loading a custom configuration.
   """
   @spec configuration() :: {:ok, UBootEnv.Config.t()} | {:error, atom()}
   def configuration() do

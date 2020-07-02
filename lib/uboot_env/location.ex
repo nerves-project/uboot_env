@@ -1,4 +1,7 @@
 defmodule UBootEnv.Location do
+  @moduledoc """
+  Environment block location
+  """
   defstruct [:path, :offset, :size]
 
   @type t() :: %__MODULE__{
