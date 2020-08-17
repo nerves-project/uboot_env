@@ -27,7 +27,7 @@ defmodule UBootEnv do
   Read the U-Boot environment into a map or key value pairs
   """
   @spec read(UBootEnv.Config.t()) :: {:ok, map()} | {:error, atom()}
-  def read(%UBootEnv.Config{} = config) do
+  def read(config = %UBootEnv.Config{}) do
     with {:ok, contents} <- UBootEnv.IO.read(config) do
       {:ok, UBootEnv.Serializer.decode(contents)}
     end
