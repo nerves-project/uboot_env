@@ -32,7 +32,7 @@ defmodule UBootEnv.MixProject do
 
   defp deps do
     [
-      {:ex_doc, "~> 0.18", only: :docs, runtime: false},
+      {:ex_doc, "~> 0.22", only: :docs, runtime: false},
       {:dialyxir, "~> 1.0.0", only: :dev, runtime: false}
     ]
   end
