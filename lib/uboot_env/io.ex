@@ -142,17 +142,13 @@ defmodule UBootEnv.IO do
   """
   @spec unpackage(binary(), :redundant | :nonredundant) ::
           {:ok, binary(), generation()} | {:error, :invalid_crc}
-  def unpackage(bin, :nonredundant) do
-    <<expected_crc::little-size(32), contents::binary>> = bin
-
+  def unpackage(<<expected_crc::little-32, contents::binary>>, :nonredundant) do
     with :ok <- validate_crc(contents, expected_crc) do
       {:ok, contents, :unused}
     end
   end
 
-  def unpackage(bin, :redundant) do
-    <<expected_crc::little-size(32), generation, contents::binary>> = bin
-
+  def unpackage(<<expected_crc::little-32, generation, contents::binary>>, :redundant) do
     with :ok <- validate_crc(contents, expected_crc) do
       {:ok, contents, generation}
     end
