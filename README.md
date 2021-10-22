@@ -27,7 +27,7 @@ Install by adding `uboot_env` to your list of dependencies in `mix.exs`:
 ```elixir
 def deps do
   [
-    {:uboot_env, "~> 0.3.0"}
+    {:uboot_env, "~> 1.0"}
   ]
 end
 ```

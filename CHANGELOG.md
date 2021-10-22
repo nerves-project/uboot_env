@@ -1,5 +1,10 @@
 # Changelog
 
+## v1.0.0
+
+This release only changes the version number and updates documentation. No code
+changes were made.
+
 ## v0.3.0
 
 This release adds support for redundant U-Boot environments. It reduces the main
