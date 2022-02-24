@@ -7,7 +7,7 @@ defmodule UBootEnvTest do
   # basically works.
 
   test "write and reread" do
-    path = Path.join(["..", "tmp_#{:random.uniform(10000)}"]) |> Path.expand(__DIR__)
+    path = Path.join(["..", "tmp_#{:rand.uniform(10000)}"]) |> Path.expand(__DIR__)
     File.write!(path, :binary.copy(<<0xFF>>, 1024))
     config = UBootEnv.Config.from_string!("#{path} 0 1024")
 
