@@ -99,11 +99,10 @@ defmodule UBootEnv.Config do
   end
 
   defp parse_file(config) do
-    config
-    |> String.split("\n")
-    |> Enum.map(&String.trim/1)
-    |> Enum.reject(&(&1 == ""))
-    |> Enum.reject(&String.starts_with?(&1, "#"))
+    for line <- String.split(config, "\n", trim: true),
+        line != "",
+        !String.starts_with?(line, "#"),
+        do: line
   end
 
   defp parse_line(line) do
