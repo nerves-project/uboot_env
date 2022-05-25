@@ -20,7 +20,7 @@ defmodule UBootEnv.MixProject do
       deps: deps(),
       dialyzer: [
         plt_add_apps: [:mix],
-        flags: [:unmatched_returns, :error_handling, :race_conditions]
+        flags: [:unmatched_returns, :error_handling, :missing_return, :extra_return]
       ],
       preferred_cli_env: %{docs: :docs, "hex.build": :docs, "hex.publish": :docs, credo: :test}
     ]
