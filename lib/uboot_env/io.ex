@@ -177,6 +177,7 @@ defmodule UBootEnv.IO do
     case File.open(location.path, [:raw, :binary, :write, :read]) do
       {:ok, fd} ->
         rc = :file.pwrite(fd, location.offset, contents)
+        _ = :file.sync(fd)
         _ = File.close(fd)
         rc
 
