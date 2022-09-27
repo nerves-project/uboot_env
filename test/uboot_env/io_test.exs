@@ -30,7 +30,7 @@ defmodule UBootEnv.IOTest do
 
     test "unpacking detects CRC errors" do
       {:ok, encoded} = UBootEnv.IO.package("testing", 1024, :unused)
-      <<oops, rest::binary()>> = IO.iodata_to_binary(encoded)
+      <<oops, rest::binary>> = IO.iodata_to_binary(encoded)
       corrupted = <<oops + 1, rest::binary>>
       assert {:error, :invalid_crc} == UBootEnv.IO.unpackage(corrupted, :nonredundant)
     end
@@ -66,7 +66,7 @@ defmodule UBootEnv.IOTest do
 
     test "unpacking detects CRC errors" do
       {:ok, encoded} = UBootEnv.IO.package("testing", 1024, 7)
-      <<oops, rest::binary()>> = IO.iodata_to_binary(encoded)
+      <<oops, rest::binary>> = IO.iodata_to_binary(encoded)
       corrupted = <<oops + 1, rest::binary>>
       assert {:error, :invalid_crc} == UBootEnv.IO.unpackage(corrupted, :redundant)
     end
