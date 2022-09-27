@@ -1,5 +1,11 @@
 # Changelog
 
+## v1.0.1
+
+* Bug fixes
+  * Sync updates to the environment with the OS to ensure that they're written
+    in case power is removed shortly afterwards. Thanks @parherman.
+
 ## v1.0.0
 
 This release only changes the version number and updates documentation. No code
