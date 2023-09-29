@@ -22,7 +22,13 @@ defmodule UBootEnv.MixProject do
         plt_add_apps: [:mix],
         flags: [:unmatched_returns, :error_handling, :missing_return, :extra_return]
       ],
-      preferred_cli_env: %{docs: :docs, "hex.build": :docs, "hex.publish": :docs, credo: :test}
+      preferred_cli_env: %{
+        docs: :docs,
+        "hex.build": :docs,
+        "hex.publish": :docs,
+        credo: :lint,
+        dialyzer: :lint
+      }
     ]
   end
 
@@ -33,9 +39,9 @@ defmodule UBootEnv.MixProject do
   defp deps do
     [
       {:ex_doc, "~> 0.22", only: :docs, runtime: false},
-      {:dialyxir, "~> 1.1", only: :dev, runtime: false},
-      {:credo, "~> 1.2", only: :test, runtime: false},
-      {:credo_binary_patterns, "~> 0.2.2", only: :test, runtime: false}
+      {:dialyxir, "~> 1.1", only: :lint, runtime: false},
+      {:credo, "~> 1.2", only: :lint, runtime: false},
+      {:credo_binary_patterns, "~> 0.2.2", only: :lint, runtime: false}
     ]
   end
 
