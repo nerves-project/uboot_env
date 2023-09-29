@@ -34,7 +34,8 @@ defmodule UBootEnv.MixProject do
     [
       {:ex_doc, "~> 0.22", only: :docs, runtime: false},
       {:dialyxir, "~> 1.1", only: :dev, runtime: false},
-      {:credo, "~> 1.2", only: :test, runtime: false}
+      {:credo, "~> 1.2", only: :test, runtime: false},
+      {:credo_binary_patterns, "~> 0.2.2", only: :test, runtime: false}
     ]
   end
 
