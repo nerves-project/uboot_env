@@ -122,7 +122,7 @@ defmodule UBootEnv.IO do
       padding = :binary.copy(<<-1>>, padding_len)
 
       crc = :erlang.crc32([bin, padding])
-      {:ok, [<<crc::little-size(32)>>, encode_generation(generation), bin, padding]}
+      {:ok, [<<crc::little-32>>, encode_generation(generation), bin, padding]}
     else
       {:error, :environment_too_small}
     end
