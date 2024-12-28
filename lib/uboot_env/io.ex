@@ -5,7 +5,8 @@ defmodule UBootEnv.IO do
   This is the module that handles the low level CRC32 and redundant block
   details.
   """
-  alias UBootEnv.{Config, Location}
+  alias UBootEnv.Config
+  alias UBootEnv.Location
 
   @type generation() :: byte() | :unused
 
