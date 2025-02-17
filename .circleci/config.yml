@@ -78,6 +78,26 @@ jobs:
               echo "Not a dependabot PR, skipping automerge"
             fi
 
+  publish:
+    docker:
+      - image: hexpm/elixir:1.18.2-erlang-27.2.1-alpine-3.21.2
+    steps:
+      - checkout
+      - run:
+          name: Install packages
+          command: |
+            apk add --no-cache build-base linux-headers git github-cli
+      - run:
+          name: Publish GitHub release
+          command: |
+            sed -n "/^## $CIRCLE_TAG/,/^## /p" CHANGELOG.md | sed '1d; /^## /d' > RELEASE_NOTES
+            gh release create $CIRCLE_TAG --notes "$(cat RELEASE_NOTES)"
+      - run:
+          name: Publish to hex.pm
+          command: |
+            mix deps.get
+            mix hex.publish --yes
+
 workflows:
   checks:
     jobs:
@@ -86,6 +106,9 @@ workflows:
           matrix:
             parameters:
               tag: *tags
+          filters:
+            tags:
+              only: /.*/
 
       - automerge:
           requires: *tags
@@ -93,3 +116,12 @@ workflows:
           filters:
             branches:
               only: /^dependabot.*/
+
+      - publish:
+          requires:
+            - build-test
+          filters:
+            tags:
+              only: /^v.*/
+            branches:
+              ignore: /.*/
