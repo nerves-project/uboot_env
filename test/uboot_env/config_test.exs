@@ -1,3 +1,7 @@
+# SPDX-FileCopyrightText: 2017 Nerves Project Authors
+#
+# SPDX-License-Identifier: Apache-2.0
+
 defmodule UBootEnv.ConfigTest do
   use ExUnit.Case
   alias UBootEnv.{Config, Location}

@@ -1,0 +1,41 @@
+version = 1
+SPDX-PackageName = "uboot_env"
+SPDX-PackageSupplier = "Nerves Project Authors <nerves@nerves-project.org>"
+SPDX-PackageDownloadLocation = "https://github.com/nerves-project/uboot_env"
+
+[[annotations]]
+path = ["README.md", "CHANGELOG.md"]
+precedence = "aggregate"
+SPDX-FileCopyrightText = "2017 Nerves Project Authors"
+SPDX-License-Identifier = "CC-BY-4.0"
+
+[[annotations]]
+path = [".gitignore", ".github/dependabot.yml", ".circleci/config.yml", "REUSE.toml"]
+precedence = "aggregate"
+SPDX-FileCopyrightText = "None"
+SPDX-License-Identifier = "CC0-1.0"
+
+[[annotations]]
+path = [".formatter.exs", "mix.lock", ".credo.exs", "mix.exs", "AUTHORS.md"]
+precedence = "aggregate"
+SPDX-FileCopyrightText = "None"
+SPDX-License-Identifier = "CC0-1.0"
+
+[[annotations]]
+path = [
+ "test/fixtures/create_fixture_env.sh",
+ "test/fixtures/fixture_fwup.bin",
+ "test/fixtures/fixture_redundant_fwup.bin",
+ "test/fixtures/fixture_redundant_uboot.bin",
+ "test/fixtures/fixture_uboot.bin",
+ "test/fixtures/fw_env.config",
+ "test/fixtures/spaces_fw_env.config",
+ "test/fixtures/support/fixture_env.script",
+ "test/fixtures/support/fixture_env_fwup.conf",
+ "test/fixtures/support/fixture_fw_env.config",
+ "test/fixtures/support/fixture_redundant_env.config",
+ "test/fixtures/support/fixture_redundant_env_fwup.conf"
+]
+precedence = "aggregate"
+SPDX-FileCopyrightText = "2017 Nerves Project Authors"
+SPDX-License-Identifier = "Apache-2.0"

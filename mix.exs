@@ -61,6 +61,15 @@ defmodule UBootEnv.MixProject do
 
   defp package do
     [
+      files: [
+        "AUTHORS.md",
+        "CHANGELOG.md",
+        "lib",
+        "LICENSES",
+        "mix.exs",
+        "README.md",
+        "REUSE.toml"
+      ],
       licenses: ["Apache-2.0"],
       links: %{"GitHub" => @source_url}
     ]
