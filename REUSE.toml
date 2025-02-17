@@ -1,0 +1,46 @@
+version = 1
+
+[[annotations]]
+path = [
+ ".circleci/config.yml",
+ ".credo.exs",
+ ".formatter.exs",
+ ".github/dependabot.yml",
+ ".gitignore",
+ "CHANGELOG.md",
+ "NOTICE",
+ "REUSE.toml",
+ "mix.exs",
+ "mix.lock"
+]
+precedence = "aggregate"
+SPDX-FileCopyrightText = "None"
+SPDX-License-Identifier = "CC0-1.0"
+
+[[annotations]]
+path = [
+ "README.md"
+]
+precedence = "aggregate"
+SPDX-FileCopyrightText = "2019 Frank Hunleth"
+SPDX-License-Identifier = "CC-BY-4.0"
+
+# Test fixtures that are not worth adding any licensing complexity
+[[annotations]]
+path = [
+ "test/fixtures/create_fixture_env.sh",
+ "test/fixtures/fixture_fwup.bin",
+ "test/fixtures/fixture_redundant_fwup.bin",
+ "test/fixtures/fixture_redundant_uboot.bin",
+ "test/fixtures/fixture_uboot.bin",
+ "test/fixtures/fw_env.config",
+ "test/fixtures/spaces_fw_env.config",
+ "test/fixtures/support/fixture_env.script",
+ "test/fixtures/support/fixture_env_fwup.conf",
+ "test/fixtures/support/fixture_fw_env.config",
+ "test/fixtures/support/fixture_redundant_env.config",
+ "test/fixtures/support/fixture_redundant_env_fwup.conf"
+]
+precedence = "aggregate"
+SPDX-FileCopyrightText = "None"
+SPDX-License-Identifier = "CC0-1.0"

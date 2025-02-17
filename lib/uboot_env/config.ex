@@ -1,3 +1,10 @@
+# SPDX-FileCopyrightText: 2018 Frank Hunleth
+# SPDX-FileCopyrightText: 2018 Justin Schneck
+# SPDX-FileCopyrightText: 2019 Alexander Buch
+# SPDX-FileCopyrightText: 2022 Jon Carstens
+#
+# SPDX-License-Identifier: Apache-2.0
+
 defmodule UBootEnv.Config do
   @moduledoc """
   Utilities for reading the U-Boot's `fw_env.config` file.

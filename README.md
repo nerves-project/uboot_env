@@ -1,7 +1,11 @@
 # UBootEnv
 
-[![CircleCI](https://circleci.com/gh/nerves-project/uboot_env.svg?style=svg)](https://circleci.com/gh/nerves-project/uboot_env)
 [![Hex version](https://img.shields.io/hexpm/v/uboot_env.svg "Hex version")](https://hex.pm/packages/uboot_env)
+[![API docs](https://img.shields.io/hexpm/v/uboot_env.svg?label=hexdocs "API docs")](https://hexdocs.pm/uboot_env/UBootEnv.html)
+[![CircleCI](https://dl.circleci.com/status-badge/img/gh/nerves-project/uboot_env/tree/main.svg?style=svg)](https://dl.circleci.com/status-badge/redirect/gh/nerves-project/uboot_env/tree/main)
+[![REUSE status](https://api.reuse.software/badge/github.com/nerves-project/uboot_env)](https://api.reuse.software/info/github.com/nerves-project/uboot_env)
+
+![REUSE status](https://api.reuse.software/badge/github.com/nerves-project/uboot_env)](https://api.reuse.software/info/github.com/nerves-project/uboot_env)
 
 This library lets you read and write [U-Boot](https://www.denx.de/wiki/U-Boot)
 environment blocks from Elixir. U-Boot environment blocks are simple key-value
@@ -62,7 +66,3 @@ iex> UBootEnv.write(new_kv)
 `UBootEnv.read/0` and `UBootEnv.write/1` do not perform any locking of the data
 they write. If you have multiple processes updating the U-Boot environment
 block, you'll have to synchronize access to it.
-
-## License
-
-This code is Apache 2 licensed.

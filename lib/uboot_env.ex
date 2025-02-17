@@ -1,3 +1,10 @@
+# SPDX-FileCopyrightText: 2018 Connor Rigby
+# SPDX-FileCopyrightText: 2018 Frank Hunleth
+# SPDX-FileCopyrightText: 2018 Justin Schneck
+# SPDX-FileCopyrightText: 2019 Tomasz Kazimierz Motyl
+#
+# SPDX-License-Identifier: Apache-2.0
+
 defmodule UBootEnv do
   @moduledoc """
   UBootEnv reads and writes U-Boot environment blocks
