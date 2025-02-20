@@ -1,3 +1,7 @@
+# SPDX-FileCopyrightText: 2017 Nerves Project Authors
+#
+# SPDX-License-Identifier: Apache-2.0
+
 defmodule UBootEnv.Config do
   @moduledoc """
   Utilities for reading the U-Boot's `fw_env.config` file.

@@ -1,3 +1,7 @@
+# SPDX-FileCopyrightText: 2017 Nerves Project Authors
+#
+# SPDX-License-Identifier: Apache-2.0
+
 defmodule UBootEnv.Serializer do
   @moduledoc """
   Encode and decode a U-Boot environment data

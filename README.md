@@ -2,6 +2,7 @@
 
 [![CircleCI](https://circleci.com/gh/nerves-project/uboot_env.svg?style=svg)](https://circleci.com/gh/nerves-project/uboot_env)
 [![Hex version](https://img.shields.io/hexpm/v/uboot_env.svg "Hex version")](https://hex.pm/packages/uboot_env)
+![REUSE status](https://api.reuse.software/badge/github.com/nerves-project/uboot_env)](https://api.reuse.software/info/github.com/nerves-project/uboot_env)
 
 This library lets you read and write [U-Boot](https://www.denx.de/wiki/U-Boot)
 environment blocks from Elixir. U-Boot environment blocks are simple key-value
@@ -65,4 +66,9 @@ block, you'll have to synchronize access to it.
 
 ## License
 
-This code is Apache 2 licensed.
+This project adheres to the [REUSE Specification](https://reuse.software) for
+managing license and copyright information.
+
+All original source code in this project is copyrighted by the Nerves Project
+Authors and licensed under Apache-2.0. See [AUTHORS.md](AUTHORS.md) for a list
+of copyright holders.
