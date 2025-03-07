@@ -61,8 +61,21 @@ defmodule UBootEnv.MixProject do
 
   defp package do
     [
+      files: [
+        "CHANGELOG.md",
+        "lib",
+        "LICENSES/*",
+        "mix.exs",
+        "NOTICE",
+        "README.md",
+        "REUSE.toml"
+      ],
       licenses: ["Apache-2.0"],
-      links: %{"GitHub" => @source_url}
+      links: %{
+        "GitHub" => @source_url,
+        "REUSE Compliance" =>
+          "https://api.reuse.software/info/github.com/nerves-project/uboot_env"
+      }
     ]
   end
 end

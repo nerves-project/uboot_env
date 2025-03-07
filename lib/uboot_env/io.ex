@@ -1,3 +1,8 @@
+# SPDX-FileCopyrightText: 2020 Frank Hunleth
+# SPDX-FileCopyrightText: 2022 Pär Eriksson
+#
+# SPDX-License-Identifier: Apache-2.0
+
 defmodule UBootEnv.IO do
   @moduledoc """
   Functions for reading and writing raw blocks to storage
