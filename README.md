@@ -5,8 +5,6 @@
 [![CircleCI](https://dl.circleci.com/status-badge/img/gh/nerves-project/uboot_env/tree/main.svg?style=svg)](https://dl.circleci.com/status-badge/redirect/gh/nerves-project/uboot_env/tree/main)
 [![REUSE status](https://api.reuse.software/badge/github.com/nerves-project/uboot_env)](https://api.reuse.software/info/github.com/nerves-project/uboot_env)
 
-![REUSE status](https://api.reuse.software/badge/github.com/nerves-project/uboot_env)](https://api.reuse.software/info/github.com/nerves-project/uboot_env)
-
 This library lets you read and write [U-Boot](https://www.denx.de/wiki/U-Boot)
 environment blocks from Elixir. U-Boot environment blocks are simple key-value
 stores used by the U-Boot bootloader and applications that need to communicate
