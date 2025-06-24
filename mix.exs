@@ -21,19 +21,24 @@ defmodule UBootEnv.MixProject do
       dialyzer: [
         plt_add_apps: [:mix],
         flags: [:unmatched_returns, :error_handling, :missing_return, :extra_return]
-      ],
-      preferred_cli_env: %{
-        docs: :docs,
-        "hex.build": :docs,
-        "hex.publish": :docs,
-        credo: :lint,
-        dialyzer: :lint
-      }
+      ]
     ]
   end
 
   def application do
     []
+  end
+
+  def cli do
+    [
+      preferred_envs: %{
+        dialyzer: :lint,
+        docs: :docs,
+        "hex.build": :docs,
+        "hex.publish": :docs,
+        credo: :lint
+      }
+    ]
   end
 
   defp deps do
