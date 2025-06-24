@@ -1,7 +1,7 @@
 defmodule UBootEnv.MixProject do
   use Mix.Project
 
-  @version "1.0.1"
+  @version "1.0.2"
   @source_url "https://github.com/nerves-project/uboot_env"
 
   if String.to_integer(System.otp_release()) < 21 do

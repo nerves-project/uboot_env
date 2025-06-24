@@ -1,5 +1,12 @@
 # Changelog
 
+## v1.0.2
+
+* Changes
+  * Fix Elixir 1.19 warning
+  * Update licensing and copyright for [REUSE](https://reuse.software)
+    compliance
+
 ## v1.0.1
 
 * Bug fixes
