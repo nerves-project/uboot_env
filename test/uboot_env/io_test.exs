@@ -78,10 +78,11 @@ defmodule UBootEnv.IOTest do
   end
 
   describe "nonredundant IO" do
-    setup do
-      path = Path.join(["..", "tmp_#{:rand.uniform(10000)}"]) |> Path.expand(__DIR__)
+    @describetag :tmp_dir
+
+    setup %{tmp_dir: tmp_dir} do
+      path = Path.join(tmp_dir, "uboot_env.bin")
       File.write!(path, :binary.copy(<<0xFF>>, 1024))
-      on_exit(fn -> File.rm!(path) end)
 
       [config: UBootEnv.Config.from_string!("#{path} 0 1024"), path: path]
     end
@@ -105,10 +106,11 @@ defmodule UBootEnv.IOTest do
   end
 
   describe "redundant IO" do
-    setup do
-      path = Path.join(["..", "tmp_#{:rand.uniform(10000)}"]) |> Path.expand(__DIR__)
+    @describetag :tmp_dir
+
+    setup %{tmp_dir: tmp_dir} do
+      path = Path.join(tmp_dir, "uboot_env.bin")
       File.write!(path, :binary.copy(<<0xFF>>, 2048))
-      on_exit(fn -> File.rm!(path) end)
 
       [config: UBootEnv.Config.from_string!("#{path} 0 1024\n#{path} 1024 1024"), path: path]
     end

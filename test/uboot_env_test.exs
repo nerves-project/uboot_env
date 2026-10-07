@@ -13,9 +13,9 @@ defmodule UBootEnvTest do
   # Most testing is done in other modules. This is a spot check that the main API
   # basically works.
 
-  test "write and reread" do
-    path = Path.join(["..", "tmp_#{:rand.uniform(10000)}"]) |> Path.expand(__DIR__)
-    on_exit(fn -> File.rm(path) end)
+  @tag :tmp_dir
+  test "write and reread", %{tmp_dir: tmp_dir} do
+    path = Path.join(tmp_dir, "uboot_env.bin")
     File.write!(path, :binary.copy(<<0xFF>>, 1024))
     config = UBootEnv.Config.from_string!("#{path} 0 1024")
 
@@ -26,9 +26,9 @@ defmodule UBootEnvTest do
     assert result == test_map
   end
 
-  test "reject invalid environments before writing" do
-    path = Path.join(["..", "tmp_#{:rand.uniform(10000)}"]) |> Path.expand(__DIR__)
-    on_exit(fn -> File.rm(path) end)
+  @tag :tmp_dir
+  test "reject invalid environments before writing", %{tmp_dir: tmp_dir} do
+    path = Path.join(tmp_dir, "uboot_env.bin")
     File.write!(path, :binary.copy(<<0xFF>>, 1024))
     config = UBootEnv.Config.from_string!("#{path} 0 1024")
 
