@@ -17,13 +17,32 @@ defmodule UBootEnv do
 
   @default_config_file "/etc/fw_env.config"
 
+  @typedoc """
+  U-Boot environment key type
+
+  Keys are ASCII strings. The `=` and \\0 characters are not allowed.
+  """
+  @type key() :: binary()
+
+  @typedoc """
+  U-Boot environment value type
+
+  Values are ASCII strings. \\0 characters are not allowed.
+  """
+  @type value() :: binary()
+
+  @typedoc """
+  U-Boot environment key-value pairs
+  """
+  @type kv_map() :: %{key() => value()}
+
   @doc """
   Read the U-Boot environment into a map or key value pairs
 
   The configuration from `"/etc/fw_env.config"` is used to find the location of
   the environment block. See `read/1` for specifying a custom location.
   """
-  @spec read() :: {:ok, map()} | {:error, reason :: atom()}
+  @spec read() :: {:ok, kv_map()} | {:error, reason :: atom()}
   def read() do
     with {:ok, config} <- configuration() do
       read(config)
@@ -33,7 +52,7 @@ defmodule UBootEnv do
   @doc """
   Read the U-Boot environment into a map or key value pairs
   """
-  @spec read(UBootEnv.Config.t()) :: {:ok, map()} | {:error, atom()}
+  @spec read(UBootEnv.Config.t()) :: {:ok, kv_map()} | {:error, atom()}
   def read(config = %UBootEnv.Config{}) do
     with {:ok, contents} <- UBootEnv.IO.read(config) do
       {:ok, UBootEnv.Serializer.decode(contents)}
@@ -45,8 +64,13 @@ defmodule UBootEnv do
 
   The configuration from `"/etc/fw_env.config"` is used to find the location of
   the environment block. See `write/2` for specifying a custom location.
+
+  Keys and values must only contain valid characters for U-Boot environment blocks.
+
+  Raises `ArgumentError` when a key contains `NUL` or `=`, or when a value
+  contains `NUL`. Returns errors for configuration and write failures.
   """
-  @spec write(map()) :: :ok | {:error, reason :: atom()}
+  @spec write(kv_map()) :: :ok | {:error, reason :: atom()}
   def write(kv) when is_map(kv) do
     with {:ok, config} <- configuration() do
       write(kv, config)
@@ -55,8 +79,13 @@ defmodule UBootEnv do
 
   @doc """
   Write a map of key-value pairs to the U-Boot environment
+
+  Keys and values must only contain valid characters for U-Boot environment blocks.
+
+  Raises `ArgumentError` when a key contains `NUL` or `=`, or when a value
+  contains `NUL`. Returns errors for write failures.
   """
-  @spec write(map, UBootEnv.Config.t()) :: :ok | {:error, atom()}
+  @spec write(kv_map(), UBootEnv.Config.t()) :: :ok | {:error, atom()}
   def write(kv, %UBootEnv.Config{} = config) when is_map(kv) do
     encoded = UBootEnv.Serializer.encode(kv)
     UBootEnv.IO.write(config, encoded)

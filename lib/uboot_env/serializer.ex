@@ -15,13 +15,31 @@ defmodule UBootEnv.Serializer do
 
   @doc """
   Encode a list of key value pairs into their binary form.
+
+  Raises `ArgumentError` when a key contains `NUL` or `=`, or when a value
+  contains `NUL`.
   """
-  @spec encode(map()) :: binary()
+  @spec encode(UBootEnv.kv_map()) :: binary()
   def encode(kv) when is_map(kv) do
+    Enum.each(kv, &validate_kv!/1)
+
     [Enum.map(kv, &kv_to_encoded/1), <<0>>] |> IO.iodata_to_binary()
   end
 
   defp kv_to_encoded({k, v}), do: [k, ?=, v, 0]
+
+  defp validate_kv!({key, value}) do
+    flat_key = IO.iodata_to_binary(key)
+    flat_value = IO.iodata_to_binary(value)
+
+    if contains_nul?(flat_key) or :binary.match(key, "=") != :nomatch,
+      do: raise(ArgumentError, "invalid U-Boot environment key: #{inspect(flat_key)}")
+
+    if contains_nul?(flat_value),
+      do: raise(ArgumentError, "invalid U-Boot environment value: #{inspect(flat_value)}")
+  end
+
+  defp contains_nul?(value), do: :binary.match(value, <<0>>) != :nomatch
 
   @doc """
   Decode a U-Boot environment binary data to a map of key/value pairs

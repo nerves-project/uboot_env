@@ -36,6 +36,22 @@ defmodule UBootEnv.SerializerTest do
     assert @test_kv == transcode(@test_kv)
   end
 
+  test "reject invalid keys and values" do
+    invalid_environments = [
+      %{"invalid\0key" => "value"},
+      %{"invalid=key" => "value"},
+      %{["invalid", 0, "key"] => "value"},
+      %{"key" => "value\0injected=value"},
+      %{"key" => ["value", 0, "injected=value"]},
+      %{make_ref() => "value"},
+      %{"key" => make_ref()}
+    ]
+
+    for environment <- invalid_environments do
+      assert_raise ArgumentError, fn -> Serializer.encode(environment) end
+    end
+  end
+
   test "handle key-only data from mkenvimage" do
     # I'm not sure whether this is valid or not, but mkenvimage can create it, so
     # don't blow up.

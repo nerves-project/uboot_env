@@ -15,6 +15,7 @@ defmodule UBootEnvTest do
 
   test "write and reread" do
     path = Path.join(["..", "tmp_#{:rand.uniform(10000)}"]) |> Path.expand(__DIR__)
+    on_exit(fn -> File.rm(path) end)
     File.write!(path, :binary.copy(<<0xFF>>, 1024))
     config = UBootEnv.Config.from_string!("#{path} 0 1024")
 
@@ -23,6 +24,25 @@ defmodule UBootEnvTest do
     {:ok, result} = UBootEnv.read(config)
 
     assert result == test_map
+  end
+
+  test "reject invalid environments before writing" do
+    path = Path.join(["..", "tmp_#{:rand.uniform(10000)}"]) |> Path.expand(__DIR__)
+    on_exit(fn -> File.rm(path) end)
+    File.write!(path, :binary.copy(<<0xFF>>, 1024))
+    config = UBootEnv.Config.from_string!("#{path} 0 1024")
+
+    :ok = UBootEnv.write(%{"original" => "value"}, config)
+
+    assert_raise ArgumentError, fn ->
+      UBootEnv.write(%{"injected=key" => "value"}, config)
+    end
+
+    assert_raise ArgumentError, fn ->
+      UBootEnv.write(%{"key" => "value\0injected=value"}, config)
+    end
+
+    assert {:ok, %{"original" => "value"}} = UBootEnv.read(config)
   end
 
   test "reading U-Boot sample environment" do
