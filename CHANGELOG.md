@@ -5,6 +5,13 @@
 
 # Changelog
 
+## v1.0.3
+
+* Changes
+  * Validate all keys and values written to the U-Boot environment to protect
+    against embedded NUL characters or `=` in keys. These would break future
+    reads of the environment. `UBootEnv.write/2` raises if these are detected.
+
 ## v1.0.2
 
 * Changes
