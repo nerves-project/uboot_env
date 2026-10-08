@@ -7,6 +7,7 @@
 
 [![Hex version](https://img.shields.io/hexpm/v/uboot_env.svg "Hex version")](https://hex.pm/packages/uboot_env)
 [![API docs](https://img.shields.io/hexpm/v/uboot_env.svg?label=hexdocs "API docs")](https://uboot-env.hexdocs.pm/UBootEnv.html)
+[![Nerves compatibility](https://compatibility.nerves-project.org/badge/uboot_env.svg)](https://compatibility.nerves-project.org/packages/uboot_env)
 [![CircleCI](https://dl.circleci.com/status-badge/img/gh/nerves-project/uboot_env/tree/main.svg?style=svg)](https://dl.circleci.com/status-badge/redirect/gh/nerves-project/uboot_env/tree/main)
 [![REUSE status](https://api.reuse.software/badge/github.com/nerves-project/uboot_env)](https://api.reuse.software/info/github.com/nerves-project/uboot_env)
 
