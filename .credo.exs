@@ -1,4 +1,6 @@
-# config/.credo.exs
+# SPDX-FileCopyrightText: None
+#
+# SPDX-License-Identifier: CC0-1.0
 %{
   configs: [
     %{
